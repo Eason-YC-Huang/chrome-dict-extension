@@ -8,5 +8,26 @@
     "matches": ["<all_urls>"],
     "js": ["content.js"],
     "css": ["content.css"]
+  }],
+  "web_accessible_resources": [{
+    "resources": [
+      "词典0.json",
+      "词典1.json",
+      "词典2.json",
+      "词典3.json",
+      "词典4.json",
+      "词典5.json",
+      "词典6.json",
+      "词典7.json",
+      "词典8.json",
+      "词典9.json",
+      "词典10.json",
+      "词典11.json",
+      "词典12.json",
+      "词典13.json",
+      "词典14.json",
+      "词典15.json"
+    ],
+    "matches": ["<all_urls>"]
   }]
 }

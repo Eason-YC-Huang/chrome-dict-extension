@@ -40,24 +40,26 @@ function showTranslationIcon(x, y, text) {
 
 async function fetchTranslation(text) {
     try {
-        const url = "https://cn.bing.com/dict/clientsearch?mkt=zh-CN&setLang=zh&form=BDVEHC&ClientVer=BDDTV3.5.1.4320&q="
-        const response = await fetch(url + text);
-        const html = await response.text();
-        const regex = /<div id="client_def_container" class="client_def_container">(.*?)<div class="client_def_container">/is;
-        const match = html.match(regex);
-        if (match) {
-            const translation = match[1];
-            console.log('Translation:', translation);
+        // 读取 dict0.json 文件
+        const response = await fetch(chrome.runtime.getURL('dict0.json'));
+        const dict = await response.json();
+
+        // 查找单词的解释
+        const translation = dict[text];
+        if (translation) {
             showResultPopup(translation);
         } else {
-            console.error('Content not found!');
+            console.error('未找到该单词的解释');
         }
     } catch (error) {
-        console.error('Failed to translate:', error);
+        console.error('读取文件失败:', error);
     }
 }
 
 function showResultPopup(translation) {
+    console.log(translation);
+    const formattedTranslation = translation.replace(/\\n/g, '<br>');
+    console.log(formattedTranslation);
     const popup = document.createElement('div');
     popup.className = 'trans-popup';
     const windowWidth = window.innerWidth;
@@ -72,7 +74,9 @@ function showResultPopup(translation) {
       <span>Translation</span>
       <button class="close-btn">×</button>
     </div>
-    <div class="content">${translation}</div>
+    <div class="content">
+        ${formattedTranslation}
+    </div>
   `;
     console.log('Popup created:', popup);
 
