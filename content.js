@@ -39,21 +39,23 @@ function showTranslationIcon(x, y, text) {
 }
 
 async function fetchTranslation(text) {
-    try {
-        // 读取 dict0.json 文件
-        const response = await fetch(chrome.runtime.getURL('dict0.json'));
-        const dict = await response.json();
+    for (let i = 0; i < 16; i++) {
+        try {
+            // 读取词典文件
+            const response = await fetch(chrome.runtime.getURL(`dict${i}.json`));
+            const dict = await response.json();
 
-        // 查找单词的解释
-        const translation = dict[text];
-        if (translation) {
-            showResultPopup(translation);
-        } else {
-            console.error('未找到该单词的解释');
+            // 查找单词的解释
+            const translation = dict[text];
+            if (translation) {
+                showResultPopup(translation.replace(/\n/g, '<br>'));
+                return;
+            }
+        } catch (error) {
+            console.error(`读取词典${i}.json文件失败:`, error);
         }
-    } catch (error) {
-        console.error('读取文件失败:', error);
     }
+    console.error('未找到该单词的解释');
 }
 
 function showResultPopup(translation) {
