@@ -9,13 +9,14 @@ document.addEventListener('mouseup', (e) => {
 function showTranslationIcon(x, y, text) {
     const icon = document.createElement('div');
     icon.className = 'trans-icon';
-    icon.innerHTML = '🔍';
+    icon.innerHTML = '😄';
     icon.style.position = 'fixed';
-    icon.style.left = `${x + 15}px`;
-    icon.style.top = `${y}px`;
+    icon.style.left = `${x + 10}px`;
+    icon.style.top = `${y+5}px`;
+    icon.style.fontSize = '24px';
+    icon.style.zIndex = '9999';
     icon.onclick = () => {
         console.log('clicked');
-        // 点击图标后移除图标
         document.body.removeChild(icon);
         return  fetchTranslation(text);
     };
@@ -39,12 +40,14 @@ function showTranslationIcon(x, y, text) {
 
 async function fetchTranslation(text) {
     try {
-        const response = await fetch(`https://dict.youdao.com/w/${text}`);
+        const url = "https://cn.bing.com/dict/clientsearch?mkt=zh-CN&setLang=zh&form=BDVEHC&ClientVer=BDDTV3.5.1.4320&q="
+        const response = await fetch(url + text);
         const html = await response.text();
-        const regex = /<div class="trans-container">(.*?)<\/div>/is;
+        const regex = /<div id="client_def_container" class="client_def_container">(.*?)<div class="client_def_container">/is;
         const match = html.match(regex);
         if (match) {
             const translation = match[1];
+            console.log('Translation:', translation);
             showResultPopup(translation);
         } else {
             console.error('Content not found!');
